@@ -172,13 +172,26 @@ python early hide:
     # Syntax: present <target> using <evidence_id> [or <evidence_id2>...]
 
     def parse_present(lexer):
+        # Two syntaxes:
+        #   present <target> using <evidence_id> [or ...]   (testimony)
+        #   present <evidence_id>                           (talk/NPC)
         target = parse_integer(lexer)
         if target is None:
             kw = parse_name(lexer)
             if kw == "current":
                 target = "current"
+            elif kw is not None and lexer.keyword("using"):
+                # kw was actually an evidence id in talk mode
+                # Rewind: treat kw as first evidence id, target = "current"
+                correct_ids = [kw]
+                while lexer.keyword("or"):
+                    correct_ids.append(require(lexer, parse_name, "evidence id"))
+                return {"target": "current", "correct_ids": correct_ids, "talk_mode": True}
+            elif kw is not None:
+                # No 'using' — talk mode: kw is the evidence id
+                return {"target": "current", "correct_ids": [kw], "talk_mode": True}
             else:
-                raise Exception("present requires an integer index or 'current'.")
+                raise Exception("present requires a target or evidence id.")
         require(lexer, lambda l: l.keyword("using"), "'using' keyword")
         correct_ids = [require(lexer, parse_name, "evidence id")]
         while lexer.keyword("or"):
