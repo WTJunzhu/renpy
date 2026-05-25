@@ -11,7 +11,9 @@
 
 python early hide:
 
-    import renpy
+    # NOTE: Do NOT `import renpy` here. In the store namespace, `renpy`
+    # is already `renpy.exports` which has `register_statement`.
+    # Importing would overwrite it with the raw module that lacks it.
 
     # ─── Registration Helper ─────────────────────────────────────
 
