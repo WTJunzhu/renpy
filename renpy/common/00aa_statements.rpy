@@ -295,38 +295,24 @@ init -997 python in _aa_stmt:
 
     import renpy
     import store
+    import renpy.statements as _stmts
 
     _aa = renpy.store._aa
 
-    # ─── Helper: re-register with execute/next ───────────────────
+    # ─── Helper: patch execute/next into existing registration ───
+    # We do NOT call renpy.register_statement() again because it
+    # would overwrite the parse function set during `python early`.
+    # Instead, update the registry dict directly.
 
-    def _reregister(name, parse=None, execute=None, next=None,
-                    block=False, **kwargs):
-        renpy.register_statement(
-            name,
-            parse=parse,
-            execute=execute,
-            next=next,
-            block=block,
-            **kwargs
-        )
-
-    # ─── Common Parse Helpers (redefined for runtime use) ────────
-
-    def parse_string(lexer):
-        return lexer.string()
-
-    def parse_integer(lexer):
-        return lexer.integer()
-
-    def parse_name(lexer):
-        return lexer.name()
-
-    def require(lexer, parse_func, label):
-        rv = parse_func(lexer)
-        if rv is None:
-            raise Exception("Expected {}.".format(label))
-        return rv
+    def _set_handlers(name, execute=None, next=None, **kwargs):
+        key = tuple(name.split())
+        if key in _stmts.registry:
+            if execute is not None:
+                _stmts.registry[key]["execute"] = execute
+            if next is not None:
+                _stmts.registry[key]["next"] = next
+            for k, v in kwargs.items():
+                _stmts.registry[key][k] = v
 
     # ─── Node inspection helpers ─────────────────────────────────
 
@@ -398,7 +384,7 @@ init -997 python in _aa_stmt:
         _aa.on_penalty(parsed["amount"])
         renpy.restart_interaction()
 
-    _reregister("penalty", parse=parse_penalty, execute=execute_penalty)
+    _set_handlers("penalty", execute=execute_penalty)
 
     # ─── get_evidence ────────────────────────────────────────────
 
@@ -411,8 +397,7 @@ init -997 python in _aa_stmt:
             raise Exception("Evidence '{}' not defined.".format(ev_id))
         renpy.restart_interaction()
 
-    _reregister("get_evidence", parse=parse_get_evidence,
-                execute=execute_get_evidence)
+    _set_handlers("get_evidence", execute=execute_get_evidence)
 
     # ─── remove_evidence ─────────────────────────────────────────
 
@@ -420,8 +405,7 @@ init -997 python in _aa_stmt:
         store.court_record.remove_evidence(parsed["evidence_id"])
         renpy.restart_interaction()
 
-    _reregister("remove_evidence", parse=parse_remove_evidence,
-                execute=execute_remove_evidence)
+    _set_handlers("remove_evidence", execute=execute_remove_evidence)
 
     # ─── set_flag ────────────────────────────────────────────────
 
@@ -429,7 +413,7 @@ init -997 python in _aa_stmt:
         store.court_record.set_flag(parsed["key"], parsed["value"])
         renpy.restart_interaction()
 
-    _reregister("set_flag", parse=parse_set_flag, execute=execute_set_flag)
+    _set_handlers("set_flag", execute=execute_set_flag)
 
     # ─── add_stmt ────────────────────────────────────────────────
 
@@ -438,7 +422,7 @@ init -997 python in _aa_stmt:
             store._aa_testimony_stmts.append(parsed["text"])
         renpy.restart_interaction()
 
-    _reregister("add_stmt", parse=parse_add_stmt, execute=execute_add_stmt)
+    _set_handlers("add_stmt", execute=execute_add_stmt)
 
     # ─── stmt ────────────────────────────────────────────────────
 
@@ -448,7 +432,7 @@ init -997 python in _aa_stmt:
             store._aa_testimony_index = len(store._aa_testimony_stmts) - 1
         renpy.restart_interaction()
 
-    _reregister("stmt", parse=parse_stmt, execute=execute_stmt)
+    _set_handlers("stmt", execute=execute_stmt)
 
     # ─── end_testimony ───────────────────────────────────────────
 
@@ -460,8 +444,7 @@ init -997 python in _aa_stmt:
         _aa.on_testimony_complete()
         renpy.restart_interaction()
 
-    _reregister("end_testimony", parse=parse_end_testimony,
-                execute=execute_end_testimony)
+    _set_handlers("end_testimony", execute=execute_end_testimony)
 
     # ─── begin_testimony ─────────────────────────────────────────
 
@@ -516,9 +499,8 @@ init -997 python in _aa_stmt:
 
         return None
 
-    _reregister("begin_testimony", parse=parse_begin_testimony,
-                execute=execute_begin_testimony, next=next_begin_testimony,
-                block="script")
+    _set_handlers("begin_testimony",
+                  execute=execute_begin_testimony, next=next_begin_testimony)
 
     # ─── cross_examination ───────────────────────────────────────
 
@@ -528,9 +510,9 @@ init -997 python in _aa_stmt:
     def next_cross_examination(parsed, block):
         return next_begin_testimony(parsed, block)
 
-    _reregister("cross_examination", parse=parse_cross_examination,
-                execute=execute_cross_examination,
-                next=next_cross_examination, block="script")
+    _set_handlers("cross_examination",
+                  execute=execute_cross_examination,
+                  next=next_cross_examination)
 
     # ─── press ───────────────────────────────────────────────────
 
@@ -543,8 +525,7 @@ init -997 python in _aa_stmt:
             return block
         return None
 
-    _reregister("press", parse=parse_press, execute=execute_press,
-                next=next_press, block="script")
+    _set_handlers("press", execute=execute_press, next=next_press)
 
     # ─── present ─────────────────────────────────────────────────
 
@@ -578,8 +559,7 @@ init -997 python in _aa_stmt:
                     return None
                 continue
 
-    _reregister("present", parse=parse_present, execute=execute_present,
-                next=next_present, block="script")
+    _set_handlers("present", execute=execute_present, next=next_present)
 
     # ─── investigate ─────────────────────────────────────────────
 
@@ -641,9 +621,8 @@ init -997 python in _aa_stmt:
         renpy.restart_interaction()
         return None
 
-    _reregister("investigate", parse=parse_investigate,
-                execute=execute_investigate, next=next_investigate,
-                block="script")
+    _set_handlers("investigate",
+                  execute=execute_investigate, next=next_investigate)
 
     # ─── hotspot ─────────────────────────────────────────────────
 
@@ -653,8 +632,7 @@ init -997 python in _aa_stmt:
     def next_hotspot(parsed, block):
         return None
 
-    _reregister("hotspot", parse=parse_hotspot, execute=execute_hotspot,
-                next=next_hotspot, block="script")
+    _set_handlers("hotspot", execute=execute_hotspot, next=next_hotspot)
 
     # ─── examine ─────────────────────────────────────────────────
 
@@ -664,8 +642,7 @@ init -997 python in _aa_stmt:
     def next_examine(parsed, block):
         return None
 
-    _reregister("examine", parse=parse_examine, execute=execute_examine,
-                next=next_examine, block="script")
+    _set_handlers("examine", execute=execute_examine, next=next_examine)
 
     # ─── end_investigate ─────────────────────────────────────────
 
@@ -674,8 +651,7 @@ init -997 python in _aa_stmt:
         store._aa_investigation_location = None
         renpy.restart_interaction()
 
-    _reregister("end_investigate", parse=parse_end_investigate,
-                execute=execute_end_investigate)
+    _set_handlers("end_investigate", execute=execute_end_investigate)
 
     # ─── talk ────────────────────────────────────────────────────
 
@@ -750,8 +726,7 @@ init -997 python in _aa_stmt:
         renpy.restart_interaction()
         return None
 
-    _reregister("talk", parse=parse_talk, execute=execute_talk,
-                next=next_talk, block="script")
+    _set_handlers("talk", execute=execute_talk, next=next_talk)
 
     # ─── topic ───────────────────────────────────────────────────
 
@@ -761,8 +736,7 @@ init -997 python in _aa_stmt:
     def next_topic(parsed, block):
         return None
 
-    _reregister("topic", parse=parse_topic, execute=execute_topic,
-                next=next_topic, block="script")
+    _set_handlers("topic", execute=execute_topic, next=next_topic)
 
     # ─── move ────────────────────────────────────────────────────
 
@@ -789,7 +763,7 @@ init -997 python in _aa_stmt:
 
         renpy.restart_interaction()
 
-    _reregister("move", parse=parse_move, execute=execute_move)
+    _set_handlers("move", execute=execute_move)
 
 
 # ─── Blocking Screens ────────────────────────────────────────────
