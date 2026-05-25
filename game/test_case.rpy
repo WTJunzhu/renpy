@@ -100,20 +100,20 @@ label test_investigation:
     investigate "辛迪·斯通的公寓" at crime_scene:
 
         # 测试 hotspot 1 — 雕像底座
-        hotspot "雕像底座" at (800, 400) size (150, 150) radius 120:
+        hotspot "雕像底座" at 800 400 size 150 150 radius 120:
             examine statue_spot:
                 "雕像底座上有明显的血迹反应。"
                 "看起来这里曾经放置过什么东西。"
                 get_evidence floor_plan
 
         # 测试 hotspot 2 — 窗户
-        hotspot "窗户" at (1200, 200) size (200, 300) radius 130:
+        hotspot "窗户" at 1200 200 size 200 300 radius 130:
             examine window:
                 "窗户面向大街。从这里可以看到楼下的情况。"
                 "窗台上有一些灰尘痕迹。"
 
         # 测试 hotspot 3 — 书架
-        hotspot "书架" at (200, 300) size (180, 400) radius 120:
+        hotspot "书架" at 200 300 size 180 400 radius 120:
             examine bookshelf:
                 "书架上摆满了各种书籍。"
                 "其中一本关于美术的书引起了注意。"
