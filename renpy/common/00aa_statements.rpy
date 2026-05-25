@@ -9,7 +9,7 @@
 # This block runs during script parsing. It registers all custom
 # statement names so Ren'Py's parser recognizes them.
 
-python early in _aa_stmt:
+python early hide:
 
     import renpy
 
