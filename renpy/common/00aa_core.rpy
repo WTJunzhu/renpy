@@ -10,7 +10,7 @@ init -998 python in _aa:
     import store
     from store import config, renpy
 
-    # ─── Registries ───────────────────────────────────────────────
+    # ─── Registries ───────────────────────────────────────────
 
     # Animation state definitions. Creators extend via aa_register_animation().
     animation_states = {
