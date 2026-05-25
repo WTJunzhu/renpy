@@ -12,7 +12,7 @@ init -997 python in _aa_text:
 
     # Register a dedicated channel for beep sounds so they don't
     # conflict with BGM or SFX channels.
-    renpy.music.register_channel("aa_beep", mixer="sfx", loop=False)
+    renpy.exports.music.register_channel("aa_beep", mixer="sfx", loop=False)
 
     # Track whether text is currently being displayed (for beep control)
     _text_active = False
