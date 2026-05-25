@@ -1,0 +1,63 @@
+{
+    "characters": [
+        {
+            "id": "phoenix",
+            "name": "成步堂龙一",
+            "color": "#c8ffc8",
+            "beep_sfx": "preset:defense",
+            "position": "left",
+            "sprites": {
+                "idle": "images/chars/phoenix_idle.png",
+                "talk": ["images/chars/phoenix_talk1.png", "images/chars/phoenix_talk2.png"],
+                "objection": "images/chars/phoenix_objection.png",
+                "think": "images/chars/phoenix_think.png"
+            }
+        },
+        {
+            "id": "payne",
+            "name": "亚内武",
+            "color": "#ffc8c8",
+            "beep_sfx": "preset:prosecution",
+            "position": "right",
+            "sprites": {
+                "idle": "images/chars/payne_idle.png",
+                "talk": "images/chars/payne_talk.png"
+            }
+        },
+        {
+            "id": "sahwit",
+            "name": "山崎正夫",
+            "color": "#ffe0a0",
+            "beep_sfx": "preset:witness",
+            "position": "center",
+            "sprites": {
+                "idle": "images/chars/sahwit_idle.png",
+                "talk": "images/chars/sahwit_talk.png",
+                "sweat": "images/chars/sahwit_sweat.png",
+                "shock": "images/chars/sahwit_shock.png"
+            }
+        },
+        {
+            "id": "larry",
+            "name": "矢张政志",
+            "color": "#a0d0ff",
+            "beep_sfx": "preset:witness",
+            "position": "center",
+            "sprites": {
+                "idle": "images/chars/larry_idle.png",
+                "talk": "images/chars/larry_talk.png"
+            }
+        },
+        {
+            "id": "judge",
+            "name": "裁判长",
+            "color": "#ffffff",
+            "beep_sfx": "preset:judge",
+            "position": "center",
+            "sprites": {
+                "idle": "images/chars/judge_idle.png",
+                "talk": "images/chars/judge_talk.png"
+            }
+        }
+    ]
+}

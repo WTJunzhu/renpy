@@ -1,0 +1,80 @@
+{
+    "locations": [
+        {
+            "id": "detention_center",
+            "name": "拘留所",
+            "background": "images/bg/detention_center.png",
+            "bgm": "audio/bgm/detention.ogg",
+            "hotspots": [
+                {
+                    "id": "visitor_room",
+                    "name": "探视室",
+                    "position": [400, 200],
+                    "size": [300, 400],
+                    "radius": 150
+                }
+            ],
+            "npcs": [
+                {
+                    "id": "larry",
+                    "name": "矢张政志",
+                    "position": [500, 300],
+                    "sprite": "images/chars/larry_idle.png",
+                    "topics": ["事件当天", "与被害人的关系", "关于雕像"],
+                    "evidence_reactions": {
+                        "thinker": "那个雕像……是辛迪房间里的！我之前见过它。",
+                        "autopsy_report": "死亡时间是9点到10点……那个时候我确实在她公寓附近……"
+                    }
+                }
+            ],
+            "exits": []
+        },
+        {
+            "id": "crime_scene",
+            "name": "辛迪·斯通的公寓",
+            "background": "images/bg/apartment.png",
+            "bgm": "audio/bgm/investigation.ogg",
+            "hotspots": [
+                {
+                    "id": "statue_spot",
+                    "name": "雕像底座",
+                    "position": [800, 400],
+                    "size": [150, 150],
+                    "radius": 120
+                },
+                {
+                    "id": "window",
+                    "name": "窗户",
+                    "position": [1200, 200],
+                    "size": [200, 300],
+                    "radius": 130
+                },
+                {
+                    "id": "bookshelf",
+                    "name": "书架",
+                    "position": [200, 300],
+                    "size": [180, 400],
+                    "radius": 120
+                }
+            ],
+            "npcs": [],
+            "exits": [
+                {
+                    "target": "detention_center",
+                    "name": "前往拘留所",
+                    "position": [0, 400],
+                    "size": [100, 200]
+                }
+            ]
+        },
+        {
+            "id": "courtroom",
+            "name": "法庭",
+            "background": "images/bg/courtroom.png",
+            "bgm": "audio/bgm/court.ogg",
+            "hotspots": [],
+            "npcs": [],
+            "exits": []
+        }
+    ]
+}

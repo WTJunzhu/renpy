@@ -1,0 +1,40 @@
+{
+    "evidence": [
+        {
+            "id": "autopsy_report",
+            "name": "尸检报告",
+            "description": "被害人辛迪·斯通的尸检报告。记录死亡时间为7月31日晚上9点至10点之间。",
+            "icon": "images/evidence/autopsy_report.png",
+            "tags": ["court"]
+        },
+        {
+            "id": "thinker",
+            "name": "思考者",
+            "description": "一座时钟造型的雕像。被害人家中发现，底部有血迹反应。",
+            "icon": "images/evidence/thinker.png",
+            "examine_images": ["images/evidence/thinker_detail.png"],
+            "tags": ["court", "investigation"]
+        },
+        {
+            "id": "passport",
+            "name": "被害人的护照",
+            "description": "辛迪·斯通的护照。显示她7月30日从法国巴黎返回。",
+            "icon": "images/evidence/passport.png",
+            "tags": ["investigation"]
+        },
+        {
+            "id": "newspaper",
+            "name": "报纸",
+            "description": "7月31日的晚报。上面有关于入室盗窃案的报道。",
+            "icon": "images/evidence/newspaper.png",
+            "tags": ["investigation"]
+        },
+        {
+            "id": "floor_plan",
+            "name": "公寓平面图",
+            "description": "辛迪·斯通公寓的平面图。标注了各个房间的位置。",
+            "icon": "images/evidence/floor_plan.png",
+            "tags": ["investigation"]
+        }
+    ]
+}
