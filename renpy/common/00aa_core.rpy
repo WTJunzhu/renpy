@@ -552,9 +552,12 @@ init -998 python in _aa:
             return []
 
 
-# ─── Store-level defaults (rollback-aware) ───────────────────────
+# ─── Store-level defaults ─────────────────────────────────────────
+# Must be init-time (not `default`) because aa_load_evidence() is
+# called from init python blocks and needs court_record to exist.
 
-default court_record = _aa.CourtRecord()
+init -997 python:
+    store.court_record = _aa.CourtRecord()
 
 # Convenience aliases at store level — let creators write
 #   court_record.add_evidence(...)
